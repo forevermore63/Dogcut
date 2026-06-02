@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SAUSAGE SLOTS • The Filthiest Wiener Slots on Solana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&amp;display=swap');
+        
+        :root {
+            --green: #166534;
+        }
+        
+        body {
+            background-color: #14532d;
+            color: #f1e7d2;
+        }
+        
+        .filthy-green {
+            color: #4ade80;
+        }
+        
+        .slot-reel {
+            background: linear-gradient(#166534, #14532d);
+            border: 4px solid #4ade80;
+            box-shadow: 0 0 20px rgba(74, 222, 128, 0.5);
+            font-family: 'Press Start 2P', system-ui;
+            font-size: 2.5rem;
+            transition: transform 0.1s ease;
+        }
+        
+        .win-overlay {
+            animation: winPop 0.5s ease forwards;
+        }
+        
+        @keyframes winPop {
+            0% { transform: scale(0.5); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .sausage {
+            font-size: 3rem;
+            line-height: 1;
+        }
+        
+        .degen-text {
+            text-shadow: 0 0 10px #4ade80;
+        }
+        
+        .slot-container {
+            background: #052e16;
+            border: 6px solid #4ade80;
+        }
+        
+        .massive-win {
+            animation: massiveWin 1s ease infinite alternate;
+        }
+        
+        .confetti {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #facc15;
+            animation: confettiFall 3s linear forwards;
+        }
+        
+        .filthy-btn {
+            transition: all 0.2s ease;
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.6);
+        }
+        
+        .filthy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(74, 222, 128, 0.9);
+        }
+        
+        .slot-symbol {
+            transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-[#14532d] text-[#f1e7d2] overflow-x-hidden">
+    <!-- Top Bar -->
+    <div class="bg-black/40 border-b border-[#4ade80]/30">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-x-3">
+                <div class="w-10 h-10 bg-[#4ade80] rounded-full flex items-center justify-center">
+                    <i class="fas fa-dog text-[#14532d] text-2xl"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-2xl tracking-tighter">SAUSAGE SLOTS</span>
+                    <span class="text-xs block -mt-1 text-[#4ade80]/70">THE FILTHIEST WIENER SLOTS ON SOLANA</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-x-2 text-sm">
+                <div class="px-3 py-1 bg-[#166534] rounded-full flex items-center gap-x-2 text-xs">
+                    <i class="fas fa-globe"></i>
+                    <span>SOLANA MAINNET</span>
+                </div>
+                <div onclick="copyMint()" class="cursor-pointer px-3 py-1 bg-[#166534] hover:bg-[#4ade80] hover:text-[#14532d] transition-colors rounded-full flex items-center gap-x-2 text-xs">
+                    <i class="fas fa-copy"></i>
+                    <span>COPY CA</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="max-w-5xl mx-auto px-4 pt-8 pb-12">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center gap-x-2 bg-[#166534] px-4 py-1 rounded-full mb-4 text-sm">
+                <i class="fas fa-bone"></i>
+                <span class="font-bold">NOOSA DACHSHUNDS × SAUSAGE THERAPY</span>
+            </div>
+            
+            <h1 class="text-7xl md:text-8xl font-black tracking-tighter leading-none degen-text">
+                SAUSAGE<br>SLOTS
+            </h1>
+            <p class="text-3xl text-[#4ade80] font-bold mt-1 tracking-tight">Poke it. Lick it. Pull the wiener... or don’t.</p>
+            
+            <div class="mt-4 text-[#4ade80]/80 text-lg">
+                Every spin is a chance to get absolutely <span class="font-bold text-white">heemed or rich</span>.<br>
+                <span class="text-[#facc15]">No in-between. Minimum 10,000 per spin guaranteed.</span>
+            </div>
+        </div>
+
+        <!-- Connection Status -->
+        <div class="max-w-md mx-auto mb-6">
+            <div id="connect-banner" onclick="connectPhantom()" 
+                 class="cursor-pointer flex items-center justify-center gap-x-3 bg-[#166534] hover:bg-[#4ade80] hover:text-[#14532d] transition-all border border-[#4ade80]/50 px-6 py-3 rounded-2xl">
+                <i class="fas fa-wallet text-xl"></i>
+                <div class="font-bold text-lg" id="connect-text">CONNECT PHANTOM</div>
+            </div>
+            
+            <div id="connected-state" class="hidden mt-3 text-center">
+                <div class="inline-flex items-center gap-x-2 bg-emerald-900/60 px-4 py-2 rounded-2xl text-sm">
+                    <i class="fas fa-check-circle text-emerald-400"></i>
+                    <span class="font-mono text-emerald-400">PHANTOM CONNECTED • YOU'RE IN THE FILTH</span>
+                </div>
+                <div class="text-[10px] text-[#4ade80]/60 mt-1 font-mono" id="wallet-address"></div>
+            </div>
+        </div>
+
+        <!-- Slot Machine -->
+        <div class="max-w-[620px] mx-auto">
+            <div class="slot-container rounded-3xl p-6 shadow-2xl">
+                
+                <!-- Slot Reels -->
+                <div class="grid grid-cols-3 gap-3 mb-6">
+                    <div class="slot-reel aspect-square rounded-2xl flex items-center justify-center overflow-hidden relative" id="reel-1">
+                        <div class="slot-symbol text-center" id="symbol-1">
+                            <div class="sausage">🌭</div>
+                        </div>
+                    </div>
+                    <div class="slot-reel aspect-square rounded-2xl flex items-center justify-center overflow-hidden relative" id="reel-2">
+                        <div class="slot-symbol text-center" id="symbol-2">
+                            <div class="sausage">🐶</div>
+                        </div>
+                    </div>
+                    <div class="slot-reel aspect-square rounded-2xl flex items-center justify-center overflow-hidden relative" id="reel-3">
+                        <div class="slot-symbol text-center" id="symbol-3">
+                            <div class="sausage">🌭</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spin Button -->
+                <button onclick="spinSlots()" 
+                        class="filthy-btn w-full py-5 text-2xl font-black tracking-[3px] bg-[#4ade80] hover:bg-white active:bg-[#facc15] text-[#14532d] rounded-2xl flex items-center justify-center gap-x-3 shadow-xl">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>SPIN THE WIENER</span>
+                </button>
+
+                <div class="text-center mt-3 text-xs text-[#4ade80]/60">
+                    MINIMUM WIN: <span class="font-bold text-[#facc15]">10,000 SOL</span> EVERY SPIN • NO CAP
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="flex justify-between items-center mt-4 px-2 text-sm">
+                <div>
+                    <div class="text-[#4ade80]/70 text-xs">YOUR BALANCE</div>
+                    <div class="font-mono text-2xl font-bold" id="balance">69,420.69</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-[#4ade80]/70 text-xs">LAST WIN</div>
+                    <div class="font-mono text-2xl font-bold text-[#facc15]" id="last-win">+42,069</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cash Out -->
+        <div class="max-w-md mx-auto mt-8">
+            <button onclick="cashOut()" 
+                    class="filthy-btn w-full py-4 text-xl font-bold border-2 border-[#4ade80] hover:bg-[#4ade80] hover:text-[#14532d] rounded-2xl flex items-center justify-center gap-x-3 transition-all">
+                <i class="fas fa-external-link-alt"></i>
+                <span>CASH OUT ON JUPITER</span>
+            </button>
+            
+            <div class="text-center mt-4">
+                <div class="text-xs text-[#4ade80]/50">Mint: SAUS...W1ENR69</div>
+                <div class="text-[10px] mt-1 text-[#4ade80]/40">THE ONLY THREE MOVES THAT MATTER: POKE • LICK • PULL</div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Massive Win Modal -->
+    <div id="win-modal" onclick="closeWinModal()" class="hidden fixed inset-0 bg-black/90 flex items-center justify-center z-50">
+        <div onclick="event.stopImmediatePropagation()" class="win-overlay max-w-md w-full mx-4 bg-[#052e16] border-4 border-[#facc15] rounded-3xl p-8 text-center relative overflow-hidden">
+            
+            <div class="absolute inset-0 pointer-events-none" id="confetti-container"></div>
+            
+            <div class="relative z-10">
+                <div class="text-[#facc15] text-6xl mb-2">🔥</div>
+                <div class="text-5xl font-black tracking-tighter text-white massive-win">MASSIVE WIN!!!</div>
+                
+                <div class="my-6">
+                    <div class="text-[#4ade80] text-sm tracking-[4px]">YOU JUST PULLED</div>
+                    <div id="win-amount" class="text-7xl font-black text-[#facc15] tabular-nums"></div>
+                    <div class="text-2xl text-white font-bold -mt-2">SOL</div>
+                </div>
+                
+                <div class="text-[#4ade80] text-sm mb-6">MINIMUM 10,000 GUARANTEED EVERY SPIN • YOU’RE IN THE FILTH NOW</div>
+                
+                <button onclick="closeWinModal()" 
+                        class="filthy-btn w-full py-4 bg-[#4ade80] text-[#14532d] font-black text-xl rounded-2xl">
+                    SPIN AGAIN • KEEP PULLING
+                </button>
+                
+                <div class="mt-4 text-xs text-[#4ade80]/50">This is your empire now. Build it filthy.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tailwind script
+        function initializeTailwind() {
+            document.documentElement.style.setProperty('--accent', '#4ade80');
+        }
+        
+        let isConnected = false;
+        let currentBalance = 69420.69;
+        
+        function updateBalance(newBalance) {
+            currentBalance = newBalance;
+            document.getElementById('balance').innerText = currentBalance.toLocaleString();
+        }
+        
+        function connectPhantom() {
+            const banner = document.getElementById('connect-banner');
+            const connected = document.getElementById('connected-state');
+            const addressEl = document.getElementById('wallet-address');
+            
+            if (!isConnected) {
+                // Simulate connection
+                banner.style.display = 'none';
+                connected.classList.remove('hidden');
+                
+                // Fake address in style of original
+                const fakeAddress = "SAUSxK2A4pLqAFCgiXX1A2cUwmeMHdpjW6FqUX";
+                addressEl.innerText = fakeAddress;
+                
+                isConnected = true;
+                
+                // Show fun toast
+                showToast("You're in the filth. Phantom connected.");
+            }
+        }
+        
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#166534] border border-[#4ade80] px-6 py-3 rounded-2xl text-sm flex items-center gap-x-2 z-[100]`;
+            toast.innerHTML = `
+                <i class="fas fa-check-circle text-[#4ade80]"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.transition = 'all 0.3s ease';
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2200);
+        }
+        
+        // Slot symbols - sausage themed
+        const symbols = ['🌭', '🐶', '🦴', '🌭', '🐾', '🔥', '💦', '🌭'];
+        
+        function getRandomSymbol() {
+            return symbols[Math.floor(Math.random() * symbols.length)];
+        }
+        
+        function spinSlots() {
+            if (!isConnected) {
+                alert("Connect Phantom first, you degenerate.");
+                return;
+            }
+            
+            const reel1 = document.getElementById('symbol-1');
+            const reel2 = document.getElementById('symbol-2');
+            const reel3 = document.getElementById('symbol-3');
+            
+            // Spin animation
+            reel1.style.transition = 'transform 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            reel2.style.transition = 'transform 0.7s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            reel3.style.transition = 'transform 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55)';
+            
+            reel1.style.transform = `translateY(${Math.random() * 80 - 40}px)`;
+            reel2.style.transform = `translateY(${Math.random() * 80 - 40}px)`;
+            reel3.style.transform = `translateY(${Math.random() * 80 - 40}px)`;
+            
+            setTimeout(() => {
+                // Force winning combination (always big win)
+                const winSymbol = getRandomSymbol();
+                
+                reel1.innerHTML = `<div class="sausage">${winSymbol}</div>`;
+                reel2.innerHTML = `<div class="sausage">${winSymbol}</div>`;
+                reel3.innerHTML = `<div class="sausage">${winSymbol}</div>`;
+                
+                reel1.style.transform = 'translateY(0)';
+                reel2.style.transform = 'translateY(0)';
+                reel3.style.transform = 'translateY(0)';
+                
+                // Calculate massive win (minimum 10,000, up to 69k+)
+                const baseWin = 10000;
+                const bonus = Math.floor(Math.random() * 60000) + 5000;
+                const totalWin = baseWin + bonus;
+                
+                // Update last win
+                document.getElementById('last-win').innerText = `+${totalWin.toLocaleString()}`;
+                
+                // Add to balance
+                updateBalance(currentBalance + totalWin);
+                
+                // Show massive win modal
+                setTimeout(() => {
+                    showMassiveWin(totalWin);
+                }, 400);
+                
+            }, 850);
+        }
+        
+        function showMassiveWin(amount) {
+            const modal = document.getElementById('win-modal');
+            const amountEl = document.getElementById('win-amount');
+            const confettiContainer = document.getElementById('confetti-container');
+            
+            amountEl.innerText = `+${amount.toLocaleString()}`;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            
+            // Create confetti
+            confettiContainer.innerHTML = '';
+            for (let i = 0; i < 80; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti';
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.top = '-20px';
+                piece.style.backgroundColor = ['#facc15', '#4ade80', '#fff', '#f472b6'][Math.floor(Math.random()*4)];
+                piece.style.animationDuration = (Math.random() * 2 + 2.5) + 's';
+                piece.style.transform = `rotate(${Math.random()*360}deg)`;
+                confettiContainer.appendChild(piece);
+                
+                setTimeout(() => {
+                    if (piece.parentNode) piece.parentNode.removeChild(piece);
+                }, 4500);
+            }
+            
+            // Play fake win sound (beep)
+            try {
+                const audio = new AudioContext();
+                const oscillator = audio.createOscillator();
+                const gain = audio.createGain();
+                oscillator.type = 'sawtooth';
+                oscillator.frequency.value = 420;
+                gain.gain.value = 0.3;
+                const filter = audio.createBiquadFilter();
+                filter.type = 'lowpass';
+                filter.frequency.value = 1200;
+                
+                oscillator.connect(filter);
+                filter.connect(gain);
+                gain.connect(audio.destination);
+                
+                oscillator.start();
+                setTimeout(() => {
+                    gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 1.2);
+                    setTimeout(() => oscillator.stop(), 1500);
+                }, 300);
+            } catch(e){}
+        }
+        
+        function closeWinModal() {
+            const modal = document.getElementById('win-modal');
+            modal.classList.remove('flex');
+            modal.classList.add('hidden');
+        }
+        
+        function cashOut() {
+            if (!isConnected) {
+                alert("Connect your Phantom first, degenerate.");
+                return;
+            }
+            
+            const modal = document.createElement('div');
+            modal.className = `fixed inset-0 bg-black/90 flex items-center justify-center z-[60]`;
+            modal.innerHTML = `
+                <div class="max-w-sm w-full mx-4 bg-[#052e16] border-4 border-[#4ade80] rounded-3xl p-8 text-center">
+                    <i class="fas fa-rocket text-6xl text-[#4ade80] mb-4"></i>
+                    <div class="text-3xl font-black mb-2">CASHING OUT TO JUPITER</div>
+                    <div class="text-[#4ade80] mb-6">Your massive wiener winnings are being sent to Jupiter aggregator...</div>
+                    
+                    <div class="text-sm text-[#4ade80]/70 mb-4">This is demo mode.<br>In real version this would actually swap on Jupiter.</div>
+                    
+                    <button onclick="this.closest('.fixed').remove()" 
+                            class="filthy-btn w-full py-4 bg-[#4ade80] text-[#14532d] font-black rounded-2xl">
+                        CLOSE • BACK TO PULLING
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(modal);
+        }
+        
+        function copyMint() {
+            const mint = "SAUSxK2A4pLqAFCgiXX1A2cUwmeMHdpjW6FqUX";
+            navigator.clipboard.writeText(mint).then(() => {
+                const originalText = event.currentTarget?.innerText || '';
+                showToast("Mint copied to clipboard");
+            }).catch(() => {
+                // fallback
+                prompt("Copy this mint:", mint);
+            });
+        }
+        
+        function initializeDemo() {
+            initializeTailwind();
+            
+            // Set initial balance
+            document.getElementById('balance').innerText = currentBalance.toLocaleString();
+            document.getElementById('last-win').innerText = '+10,000';
+            
+            // Random initial symbols
+            const reels = ['symbol-1', 'symbol-2', 'symbol-3'];
+            reels.forEach((id, i) => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const sym = symbols[(i * 2) % symbols.length];
+                    el.innerHTML = `<div class="sausage">${sym}</div>`;
+                }
+            });
+            
+            // Keyboard support
+            document.addEventListener('keydown', function(e) {
+                if (e.key === " " || e.key === "Enter") {
+                    e.preventDefault();
+                    if (!document.getElementById('win-modal').classList.contains('hidden')) {
+                        closeWinModal();
+                    } else {
+                        spinSlots();
+                    }
+                }
+                if (e.key.toLowerCase() === "c" && e.metaKey) {
+                    e.preventDefault();
+                    connectPhantom();
+                }
+            });
+            
+            // Welcome message
+            setTimeout(() => {
+                if (!isConnected) {
+                    // subtle hint
+                }
+            }, 4500);
+            
+            console.log('%c[Sausage Slots] Demo initialized. Every spin wins minimum 10k. Built for Emily.', 'color:#4ade80');
+        }
+        
+        // Boot
+        window.onload = initializeDemo;
+    </script>
+</body>
+</html>
